@@ -15,18 +15,22 @@ const Todo = ({ name, status }) => (
   </div>
 );
 
+const MemorizedTodo = React.memo(Todo);
+
 const TodoList = ({ todos }) => (
   <section>
     <h4>Todo list</h4>
     <ul style={{ listStyle: "none", margin: 0 }}>
       {todos.map((todo) => (
         <li key={todo.name} style={{ marginBottom: "1rem" }}>
-          <Todo {...todo} />
+          <MemorizedTodo {...todo} />
         </li>
       ))}
     </ul>
   </section>
 );
+
+const MemorizedTodoList = React.memo(TodoList);
 
 const PageHeader = () => (
   <header>
@@ -36,6 +40,8 @@ const PageHeader = () => (
     </h4>
   </header>
 );
+
+const MemorizedTPageHeader = React.memo(PageHeader);
 
 const AddTodoForm = ({ onAddTodo }) => {
   const [newTodo, setNewTodo] = React.useState(DEFAULT_TODO);
@@ -91,6 +97,8 @@ const AddTodoForm = ({ onAddTodo }) => {
   );
 };
 
+const MemorizedAddTodoForm = React.memo(AddTodoForm);
+
 const HomePage = () => {
   const [todos, setTodos] = React.useState([]);
 
@@ -100,11 +108,11 @@ const HomePage = () => {
 
   return (
     <>
-      <PageHeader />
-      <AddTodoForm onAddTodo={handleAddTodo} />
+      <MemorizedTPageHeader />
+      <MemorizedAddTodoForm onAddTodo={handleAddTodo} />
       <hr />
       {todos.length ? (
-        <TodoList todos={todos} />
+        <MemorizedTodoList todos={todos} />
       ) : (
         <p>You do not have any todo atm.</p>
       )}
