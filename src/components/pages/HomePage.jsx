@@ -1,0 +1,115 @@
+import React from "react";
+
+const DEFAULT_TODO = {
+  name: "",
+  status: "",
+};
+
+const Todo = ({ name, status }) => (
+  <div
+    className="todo"
+    style={{ display: "flex", justifyContent: "space-around" }}
+  >
+    <div className="todo__name">Name:{name}</div>
+    <div className="todo__status">Status:{status}</div>
+  </div>
+);
+
+const TodoList = ({ todos }) => (
+  <section>
+    <h4>Todo list</h4>
+    <ul style={{ listStyle: "none", margin: 0 }}>
+      {todos.map((todo) => (
+        <li key={todo.name} style={{ marginBottom: "1rem" }}>
+          <Todo {...todo} />
+        </li>
+      ))}
+    </ul>
+  </section>
+);
+
+const PageHeader = () => (
+  <header>
+    <h4>
+      Profiler Example <br />
+      <small>page header</small>
+    </h4>
+  </header>
+);
+
+const AddTodoForm = ({ onAddTodo }) => {
+  const [newTodo, setNewTodo] = React.useState(DEFAULT_TODO);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (newTodo.name && newTodo.status) {
+      onAddTodo(newTodo);
+      setNewTodo(DEFAULT_TODO);
+    }
+  };
+
+  return (
+    <section>
+      <h4>Add new Todo</h4>
+      <form onSubmit={handleSubmit}>
+        <p>
+          <label htmlFor="todoName">Name:</label>
+          <input
+            value={newTodo.name}
+            type="text"
+            name="todoName"
+            id="todoName"
+            onChange={(e) =>
+              setNewTodo({
+                ...newTodo,
+                name: e.target.value,
+              })
+            }
+          />
+        </p>
+        <p>
+          <label htmlFor="todoStatus">Status:</label>
+          <input
+            value={newTodo.status}
+            id="todoStatus"
+            type="text"
+            name="status"
+            onChange={(e) =>
+              setNewTodo({
+                ...newTodo,
+                status: e.target.value,
+              })
+            }
+          />
+        </p>
+        <p>
+          <button type="submit">Add</button>
+        </p>
+      </form>
+    </section>
+  );
+};
+
+const HomePage = () => {
+  const [todos, setTodos] = React.useState([]);
+
+  const handleAddTodo = (newTodo) => {
+    setTodos([...todos, newTodo]);
+  };
+
+  return (
+    <>
+      <PageHeader />
+      <AddTodoForm onAddTodo={handleAddTodo} />
+      <hr />
+      {todos.length ? (
+        <TodoList todos={todos} />
+      ) : (
+        <p>You do not have any todo atm.</p>
+      )}
+    </>
+  );
+};
+
+export default HomePage;
